@@ -57,6 +57,6 @@ for f in $(ls data); do
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
 
-echo "data load completed, refreshing api cache"
+echo "data load completed"
 
-curl --fail "api/covid?refresh=true"
+[ "$1" == "refresh" ] && echo "refreshing api cache" && curl --fail "api/covid?refresh=true"

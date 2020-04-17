@@ -17,6 +17,11 @@ components:
         containerPort: 5432
     volumeMountPath: /var/lib/postgresql
 
+  - type: init
+    name: initial-load
+    containers:
+      - dir: data-loader
+
   - type: stateless
     name: api
     instances: 3
@@ -37,11 +42,6 @@ components:
         containerPort: 8000
         metricsPath: /  # this component serves metrics on port 8000, this tells f8 to request this path to collect them
 
-  - type: init
-    name: initial-load
-    containers:
-      - dir: data-loader
-
   - type: stateless
     name: web
     instances: 2
@@ -61,6 +61,8 @@ components:
     schedule: '0 * * * *'
     containers:
       - dir: data-loader
+        args:
+          - refresh
 
 #tests:
 #  - name: func
