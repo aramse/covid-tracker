@@ -108,6 +108,8 @@ USA_states = {
     "WI": "Wisconsin",
     "WY": "Wyoming"
 }
+
+
 def clean_locality(r, scope):
     if scope.strip() != "France":
         r = clean_region(r)
@@ -117,104 +119,12 @@ def clean_locality(r, scope):
         r = clean_spain_locality(r)
     return r
 
+
 def last_file_update(f):
     process = subprocess.Popen(['date', '-r', f, '+%s'], stdout=subprocess.PIPE)
     return int(process.communicate()[0].strip() or 0)
 
 
-countries = {
-    "confirmed": defaultdict(list),
-    "recovered": defaultdict(list),
-    "deceased": defaultdict(list)
-}
-last_jhu_update = 0
-
-for typ in ["confirmed", "recovered", "deceased"]:
-    fname = os.path.join("data", "time_series_covid19_%s_global.csv".lower() % typ.replace("deceased", "deaths"))
-    res = last_file_update(fname)
-    if last_jhu_update < res:
-        last_jhu_update = res
-    with open(fname) as f:
-        for row in sorted(csv.DictReader(f), key=lambda x: (x["Country/Region"], x["Province/State"])):
-            if row["Province/State"] in ["Recovered", "From Diamond Princess", "US"]:
-                continue
-            countries[typ][clean_region(row['Country/Region'])].append(row)
-
-
-usa_states = {
-    #"tested": defaultdict(list),
-    "confirmed": defaultdict(list),
-    "deceased": defaultdict(list)
-}
-last_usa_update = 0
-
-for typ in ["confirmed", "deceased"]:  #, "tested"]:
-    fname = os.path.join("data", "time_series_covid19_%s_us.csv".lower() % typ.replace("deceased", "deaths").replace("tested", "testing"))
-    res = last_file_update(fname)
-    if last_usa_update < res:
-        last_usa_update = res
-    with open(fname) as f:
-        for row in sorted(csv.DictReader(f), key=lambda x: (x["Province_State"], x["Admin2"])):
-            usa_states[typ][clean_region(row['Province_State'])].append(row)
-
-eldate = lambda d, i: int(d.split('/')[i])
-fix_year = lambda d: d if d > 2000 else 2000 + d
-conv = lambda d: '%d-%02d-%02d' % (fix_year(eldate(d, 2)), eldate(d, 0), eldate(d, 1))
-conv_fr = lambda d: '%d-%02d-%02d' % (fix_year(eldate(d, 2)), eldate(d, 1), eldate(d, 0))
-rconv = lambda d: '%s/%s/20' % (d.split('-')[1].lstrip('0'), d.split('-')[2].lstrip('0'))
-
-get_value = lambda row, dat: int(float(row[rconv(dat)] or 0))
-sum_values = lambda country, dat: sum([get_value(region, dat) for region in country])
-
-ignore_fields = ['Lat', 'Long', 'Province/State', 'Country/Region']
-dates = [conv(x) for x in countries["confirmed"]["France"][0].keys() if x not in ignore_fields]
-dates.sort()
-while not max([sum_values(countries["confirmed"][c], dates[-1]) for c in countries["confirmed"].keys()]):
-    dates.pop()
-n_dates = len(dates)
-
-data = {
-  "dates": dates,
-  "scopes": {
-    "World": {
-      "level": "country",
-      "source": {
-        "name": "JHU CSSE",
-        "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
-      }
-    },
-    "China": {
-      "level": "province",
-      "source": {
-        "name": "JHU CSSE",
-        "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
-      }
-    },
-    "Canada": {
-      "level": "province",
-      "source": {
-        "name": "JHU CSSE",
-        "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
-      }
-    },
-    "Australia": {
-      "level": "state",
-      "source": {
-        "name": "JHU CSSE",
-        "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
-      }
-    },
-    "USA": {
-      "level": "state",
-      "source": {
-        "name": "JHU CSSE",
-        "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
-      }
-    }
-  }
-}
-
-populations = {}
 def load_populations(scopes):
     for name in scopes:
         name = name.strip()
@@ -227,7 +137,6 @@ def load_populations(scopes):
             print("WARNING: population data missing in scope %s for place %s" % (name, place), file=sys.stderr)
         except IOError:
             print("WARNING: population data missing for scope %s" % name, file=sys.stderr)
-load_populations(data["scopes"].keys())
 
 
 def unit_vals(ndates, fieldnames, population=0):
@@ -239,7 +148,103 @@ def unit_vals(ndates, fieldnames, population=0):
         unit[f] = [0] * ndates
     return unit
 
+
 def get_data():
+    countries = {
+        "confirmed": defaultdict(list),
+        "recovered": defaultdict(list),
+        "deceased": defaultdict(list)
+    }
+    last_jhu_update = 0
+
+    for typ in ["confirmed", "recovered", "deceased"]:
+        fname = os.path.join("data", "time_series_covid19_%s_global.csv".lower() % typ.replace("deceased", "deaths"))
+        res = last_file_update(fname)
+        if last_jhu_update < res:
+            last_jhu_update = res
+        with open(fname) as f:
+            for row in sorted(csv.DictReader(f), key=lambda x: (x["Country/Region"], x["Province/State"])):
+                if row["Province/State"] in ["Recovered", "From Diamond Princess", "US"]:
+                    continue
+                countries[typ][clean_region(row['Country/Region'])].append(row)
+
+    usa_states = {
+        # "tested": defaultdict(list),
+        "confirmed": defaultdict(list),
+        "deceased": defaultdict(list)
+    }
+    last_usa_update = 0
+
+    for typ in ["confirmed", "deceased"]:  # , "tested"]:
+        fname = os.path.join("data",
+                             "time_series_covid19_%s_us.csv".lower() % typ.replace("deceased", "deaths").replace(
+                                 "tested", "testing"))
+        res = last_file_update(fname)
+        if last_usa_update < res:
+            last_usa_update = res
+        with open(fname) as f:
+            for row in sorted(csv.DictReader(f), key=lambda x: (x["Province_State"], x["Admin2"])):
+                usa_states[typ][clean_region(row['Province_State'])].append(row)
+
+    eldate = lambda d, i: int(d.split('/')[i])
+    fix_year = lambda d: d if d > 2000 else 2000 + d
+    conv = lambda d: '%d-%02d-%02d' % (fix_year(eldate(d, 2)), eldate(d, 0), eldate(d, 1))
+    conv_fr = lambda d: '%d-%02d-%02d' % (fix_year(eldate(d, 2)), eldate(d, 1), eldate(d, 0))
+    rconv = lambda d: '%s/%s/20' % (d.split('-')[1].lstrip('0'), d.split('-')[2].lstrip('0'))
+
+    get_value = lambda row, dat: int(float(row[rconv(dat)] or 0))
+    sum_values = lambda country, dat: sum([get_value(region, dat) for region in country])
+
+    ignore_fields = ['Lat', 'Long', 'Province/State', 'Country/Region']
+    dates = [conv(x) for x in countries["confirmed"]["France"][0].keys() if x not in ignore_fields]
+    dates.sort()
+    while not max([sum_values(countries["confirmed"][c], dates[-1]) for c in countries["confirmed"].keys()]):
+        dates.pop()
+    n_dates = len(dates)
+
+    data = {
+        "dates": dates,
+        "scopes": {
+            "World": {
+                "level": "country",
+                "source": {
+                    "name": "JHU CSSE",
+                    "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
+                }
+            },
+            "China": {
+                "level": "province",
+                "source": {
+                    "name": "JHU CSSE",
+                    "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
+                }
+            },
+            "Canada": {
+                "level": "province",
+                "source": {
+                    "name": "JHU CSSE",
+                    "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
+                }
+            },
+            "Australia": {
+                "level": "state",
+                "source": {
+                    "name": "JHU CSSE",
+                    "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
+                }
+            },
+            "USA": {
+                "level": "state",
+                "source": {
+                    "name": "JHU CSSE",
+                    "url": "https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series"
+                }
+            }
+        }
+    }
+    populations = {}
+    load_populations(data["scopes"].keys())
+
     for name, scope in data["scopes"].items():
         fields = ["confirmed", "deceased"]
         if name == "USA":
