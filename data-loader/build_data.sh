@@ -60,3 +60,5 @@ done
 echo "data load completed"
 
 [ "$1" == "refresh" ] && echo "refreshing api cache" && curl --fail "api/covid?refresh=true"
+
+exit 0
