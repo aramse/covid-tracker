@@ -31,7 +31,7 @@ components:
       max_instances: 5
       target_cpu_util: 80
     containers:
-      - dir: .
+      - dir: api
         readyCheck:
           httpGet:
             port: 8080
@@ -64,10 +64,10 @@ components:
     containers:
       - dir: data-loader
 
-tests:
-  - name: func
-    containers:
-      - dir: ./tests/func
-  - name: perf
-    containers:
-      - dir: ./tests/perf
+#tests:
+#  - name: func
+#    containers:
+#      - dir: ./tests/func
+#  - name: perf
+#    containers:
+#      - dir: ./tests/perf
