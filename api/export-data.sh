@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PSQL="psql postgresql://postgres:postgres@172.17.0.3:5432"
+PSQL="psql postgresql://postgres:postgres@db:5432"
 
 mkdir -p data
 for table in $($PSQL -t -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE';"); do

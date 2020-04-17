@@ -47,13 +47,14 @@ curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1
 curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0/export?format=csv&id=1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0&gid=1285380985" > data/population-USA.csv
 '''
 
+PSQL="psql postgresql://postgres:postgres@db:5432"
 echo "data retrieved, loading to database"
 for f in $(ls data); do
   table=$(echo $f | cut -d '.' -f 1 | sed 's/-/_/g')
-  psql postgresql://postgres:postgres@db:5432 -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
-  cat data/$f | psql postgresql://postgres:postgres@db:5432 -c "copy ${table}_tmp from stdin csv delimiter '}' header;"
-  psql postgresql://postgres:postgres@db:5432 -c "drop table if exists ${table}"
-  psql postgresql://postgres:postgres@db:5432 -c "alter table ${table}_tmp rename to ${table};"
+  $PSQL -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
+  cat data/$f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter '}' header;"
+  $PSQL -c "drop table if exists ${table}"
+  $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
 
 echo "data loaded completed"
