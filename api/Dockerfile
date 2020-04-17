@@ -1,6 +1,5 @@
 FROM centos:7
 
-RUN echo foo
 RUN yum install -y postgresql
 RUN yum install -y epel-release
 RUN yum install -y python-pip
