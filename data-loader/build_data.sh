@@ -24,7 +24,7 @@ curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | he
 curl -fL https://raw.githubusercontent.com/opencovid19-fr/data/master/dist/chiffres-cles.csv > data/chiffres-cles.csv
 
 # UK official data
-curl -fL https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-indicators-uk.csv > data/covid-19-indicators-uk.csv
+curl -fL https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-indicators-uk.csv > data/covid_19_indicators_uk.csv
 python bin/consolidate_uk.py > data/uk.csv
 
 # Germany official data
