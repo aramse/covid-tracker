@@ -35,7 +35,7 @@ def complete_last_row(dates, countries):
             countries["England"][c].append(countries["UK"][c][-1] - countries["Wales"][c][-1] - countries["Scotland"][c][-1] - countries["Northern Ireland"][c][-1])
     return dates, countries
 
-with open(os.path.join("data", "covid-19-indicators-uk.csv")) as f:
+with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
     for row in csv.DictReader(f):
         if row["Date"] < MINDATE or row["Indicator"] == "Tests":
             continue

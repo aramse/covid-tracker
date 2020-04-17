@@ -1,8 +1,3 @@
-var GA_MEASUREMENT_ID = "UA-10423931-9";
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', GA_MEASUREMENT_ID);
 
 d3.formatDefaultLocale({
   "decimal": ".",
@@ -309,7 +304,7 @@ new Vue({
     download_data: function() {
       var cacheBypass = new Date().getTime();
       d3.json(
-        "data/coronavirus-countries.json?" + cacheBypass,
+        "../api/80/covid",
         this.prepareData
       );
     },
@@ -1194,7 +1189,7 @@ new Vue({
     exportData: function() {
       var a = document.createElement('a'),
         file = "coronavirus-countries.json";
-      a.href = "data/" + file;
+      a.href = "../api/80/covid";
       a.download = file;
       document.body.appendChild(a);
       a.click();
