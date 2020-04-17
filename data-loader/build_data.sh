@@ -57,7 +57,6 @@ for f in $(ls data); do
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
 
-echo "data loaded completed"
+echo "data load completed, refreshing api cache"
 
-  # Build agregated data for dashboard
-#  ./bin/export-main-countries.py
+curl --fail "api/covid?refresh=true"
