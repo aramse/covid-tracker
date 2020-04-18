@@ -64,10 +64,14 @@ components:
         args:
           - refresh
 
-#tests:
-#  - name: func
-#    containers:
-#      - dir: ./tests/func
+tests:
+  - name: func
+    containers:
+      - image: centos
+        command:
+          - /bin/sh
+          - -c
+          - curl 'api/covid?refresh=true'
 #  - name: perf
 #    containers:
 #      - dir: ./tests/perf
