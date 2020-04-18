@@ -61,8 +61,6 @@ components:
     schedule: '0 * * * *'
     containers:
       - dir: data-loader
-        args:
-          - refresh
 
 tests:
   - name: func
