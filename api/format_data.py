@@ -109,6 +109,8 @@ USA_states = {
     "WY": "Wyoming"
 }
 
+populations = {}
+
 
 def clean_locality(r, scope):
     if scope.strip() != "France":
@@ -129,7 +131,7 @@ def load_populations(scopes):
     for name in scopes:
         name = name.strip()
         try:
-            with open(os.path.join("population-data", "population-%s.csv" % name).lower()) as f:
+            with open(os.path.join("population-data", "population-%s.csv" % name)) as f:
                 populations[name] = {}
                 for place in csv.DictReader(f):
                     populations[name][place["id"]] = int(place["pop"])
@@ -179,6 +181,7 @@ def get_data():
         fname = os.path.join("data",
                              "time_series_covid19_%s_us.csv".lower() % typ.replace("deceased", "deaths").replace(
                                  "tested", "testing"))
+        print('processing file: ' + fname)
         res = last_file_update(fname)
         if last_usa_update < res:
             last_usa_update = res
@@ -242,10 +245,11 @@ def get_data():
             }
         }
     }
-    populations = {}
+
     load_populations(data["scopes"].keys())
 
     for name, scope in data["scopes"].items():
+        print('processing data for: ' + name)
         fields = ["confirmed", "deceased"]
         if name == "USA":
             #fields.append("tested")
@@ -277,6 +281,8 @@ def get_data():
                 vals = {}
                 # TODO Handle tested for USA when there
                 for cas in ["confirmed", "deceased"] + (["recovered"] if "recovered" in fields else []):
+                    # print('processing row: ' + str(i) + ', ' + d)
+                    # print(json.dumps(vals))
                     vals[cas] = sum_values(values[cas][c], d) if name in ["World", "USA"] else get_value(values[cas][name][idx], d)
                     scope["values"][c][cas][i] += vals[cas]
                     scope["values"]["total"][cas][i] += vals[cas]
