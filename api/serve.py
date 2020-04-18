@@ -49,7 +49,7 @@ class covid:
     params = web.input(refresh=False)
     global CACHE
     if params.refresh or not CACHE:
-      subprocess.call('export-data.sh')
+      subprocess.call(['bin/bash' '-c', 'export_data.sh'])
       CACHE = format_data.get_data()
     return json.dumps(CACHE, sort_keys=True)
 
