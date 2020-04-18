@@ -47,6 +47,7 @@ def exec_query(query, read=False):
 class covid:
   def GET(self):
     params = web.input(refresh=False)
+    global CACHE
     if params.refresh or not CACHE:
       subprocess.call('export-data.sh')
       CACHE = format_data.get_data()
