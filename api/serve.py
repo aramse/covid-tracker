@@ -12,6 +12,7 @@ import format_data
 
 CHECK_ALIVE_PATH = '/alive'
 CHECK_READY_PATH = '/ready'
+CACHE = {}
 
 # Instrumentation for monitoring
 def before_request():
@@ -63,8 +64,6 @@ class checkReady:
 
 
 if __name__ == '__main__':
-
-  CACHE = {}
 
   # map uris to classes
   urls = (
