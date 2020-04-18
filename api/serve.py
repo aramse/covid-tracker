@@ -49,7 +49,9 @@ class covid:
     params = web.input(refresh=False)
     global CACHE
     if params.refresh or not CACHE:
-      subprocess.call(['bin/bash' '-c', 'export_data.sh'])
+      if 0 != subprocess.call(os.getcwd() + '/export_data.sh', shell=True):
+        print('error refreshing data')
+        raise Exception
       CACHE = format_data.get_data()
     return json.dumps(CACHE, sort_keys=True)
 
