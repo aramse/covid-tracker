@@ -71,7 +71,7 @@ tests:
         command:
           - /bin/sh
           - -c
-          - curl 'api/covid?refresh=true'
+          - curl --fail 'api/covid?refresh=true'
 #  - name: perf
 #    containers:
 #      - dir: ./tests/perf
