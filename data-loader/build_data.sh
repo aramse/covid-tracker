@@ -18,7 +18,7 @@ done;
 curl -fL https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv > data/dpc-covid19-ita-regioni.csv
 
 # Spain official data
-curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | head -n -5 > data/serie_historica_acumulados.csv
+curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | sed -n '/NOTA:.*/q;p' > data/serie_historica_acumulados.csv
 
 # France official data
 curl -fL https://raw.githubusercontent.com/opencovid19-fr/data/master/dist/chiffres-cles.csv > data/chiffres-cles.csv
