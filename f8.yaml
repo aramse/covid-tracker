@@ -62,6 +62,24 @@ components:
     containers:
       - dir: data-loader
 
+  - name: db-ui
+    type: stateless
+    containers:
+      - image: 'sosedoff/pgweb:0.9.12'
+        readyCheck:
+          httpGet:
+            port: 8081
+            path: /covid-tracker/%(environment)s/db-ui/80
+        command:
+          - /bin/sh
+          - '-c'
+          - '/usr/bin/pgweb --bind=0.0.0.0 --listen=8081 --host=db --user=postgres --pass=postgres --ssl=disable --prefix=covid-tracker/%(environment)s/db-ui/80'
+    expose:
+      - servicePort: 80
+        containerPort: 8081
+        keep-prefix: true
+        external: true
+
 tests:
   - name: func
     containers:
