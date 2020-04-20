@@ -47,13 +47,15 @@ curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1
 curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0/export?format=csv&id=1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0&gid=1285380985" > population-data/population-USA.csv
 '''
 
-PSQL="psql postgresql://postgres:postgres@db:5432"
 echo "data retrieved, loading to database"
+
+PSQL="psql postgresql://postgres:postgres@db:5432"
+PGFUTTER="pgfutter --schema public --table ${table}_tmp --host db --user postgres --pw postgres"
 for f in $(ls data); do
   table=$(echo $f | cut -d '.' -f 1 | sed 's/-/_/g')
   f=data/$f
   #sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
-  $PSQL -c "drop table if exists ${table}_tmp; $(pgfutter --schema public --table ${table}_tmp csv $f);"
+  $PSQL -c "drop table if exists ${table}_tmp; $($PGFUTTER --table ${table}_tmp csv $f);"
   cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter ',' header;"
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
