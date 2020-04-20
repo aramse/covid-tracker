@@ -1,6 +1,6 @@
 FROM centos:7
 
-RUN yum install -y postgresql
+RUN yum install -y postgresql wget
 RUN wget https://github.com/lukasmartinelli/pgfutter/releases/download/v1.2/pgfutter_linux_amd64 -O /usr/local/bin/pgflutter && chmod +x /usr/local/bin/pgfutter
 
 WORKDIR /app
