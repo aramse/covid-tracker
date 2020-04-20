@@ -55,7 +55,8 @@ for f in $(ls data); do
   table=$(echo $f | cut -d '.' -f 1 | sed 's/-/_/g')
   f=data/$f
   #sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
-  $PSQL -c "drop table if exists ${table}_tmp; $PGFUTTER --table ${table}_tmp csv $f;"
+  $PSQL -c "drop table if exists ${table}_tmp;"
+  $PGFUTTER --table ${table}_tmp csv $f
   #cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter ',' header;"
   $PSQL -c "drop table if exists ${table}; alter table ${table}_tmp rename to ${table};"
 done
