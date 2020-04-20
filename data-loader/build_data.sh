@@ -54,6 +54,7 @@ for f in $(ls data); do
   f=data/$f
   #sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
   #$PSQL -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
+  pgfutter --db "db" --port "5432" --user "postgres" --pw "postgres" csv $f
   cat $f | $PSQL -c "copy ${table} from stdin csv delimiter ',' header;"
   #$PSQL -c "drop table if exists ${table}"
   #$PSQL -c "alter table ${table}_tmp rename to ${table};"
