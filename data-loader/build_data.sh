@@ -52,9 +52,9 @@ echo "data retrieved, loading to database"
 for f in $(ls data); do
   table=$(echo $f | cut -d '.' -f 1 | sed 's/-/_/g')
   f=data/$f
-  sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
+  #sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
   $PSQL -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
-  cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter '}';"
+  cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter ',' header;"
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
