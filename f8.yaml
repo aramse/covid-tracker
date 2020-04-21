@@ -58,7 +58,7 @@ components:
 
   - name: data-loader
     type: scheduled
-    schedule: '0 */1 * * *'
+    schedule: '0 */3 * * *'
     containers:
       - dir: data-loader
 
