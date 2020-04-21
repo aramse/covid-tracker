@@ -58,7 +58,7 @@ for f in $(ls data); do
 done
 
 echo "checking if api exists, and ensuring it does not transition from working to broken"
-if [ curl --fail "api/covid?refresh=true" ]; then
+if curl --fail "api/covid?refresh=true"; then
   curl --fail "api/covid?refresh=true&suffix=_tmp"
 fi
 
