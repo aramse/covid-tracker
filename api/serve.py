@@ -46,13 +46,13 @@ def exec_query(query, read=False):
 
 class covid:
   def GET(self):
-    params = web.input(refresh=False)
+    params = web.input(refresh=False, suffix='')
     global CACHE
     if params.refresh or not CACHE:
-      if 0 != subprocess.call(os.getcwd() + '/export_data.sh', shell=True):
+      if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + suffix, shell=True):
         print('error refreshing data')
         raise Exception
-      CACHE = format_data.get_data()
+      CACHE = format_data.get_data(suffix=params.suffix)
     return json.dumps(CACHE, sort_keys=True)
 
 

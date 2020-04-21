@@ -151,7 +151,7 @@ def unit_vals(ndates, fieldnames, population=0):
     return unit
 
 
-def get_data():
+def get_data(suffix=''):
     countries = {
         "confirmed": defaultdict(list),
         "recovered": defaultdict(list),
@@ -160,7 +160,7 @@ def get_data():
     last_jhu_update = 0
 
     for typ in ["confirmed", "recovered", "deceased"]:
-        fname = os.path.join("data", "time_series_covid19_%s_global.csv".lower() % typ.replace("deceased", "deaths"))
+        fname = os.path.join("data" + suffix, "time_series_covid19_%s_global.csv".lower() % typ.replace("deceased", "deaths"))
         res = last_file_update(fname)
         if last_jhu_update < res:
             last_jhu_update = res
@@ -178,7 +178,7 @@ def get_data():
     last_usa_update = 0
 
     for typ in ["confirmed", "deceased"]:  # , "tested"]:
-        fname = os.path.join("data",
+        fname = os.path.join("data" + suffix,
                              "time_series_covid19_%s_us.csv".lower() % typ.replace("deceased", "deaths").replace(
                                  "tested", "testing"))
         print('processing file: ' + fname)
@@ -293,7 +293,7 @@ def get_data():
 
 
     france_ehpad = 0
-    with open(os.path.join("data", "chiffres_cles.csv")) as f:
+    with open(os.path.join("data" + suffix, "chiffres_cles.csv")) as f:
         for row in csv.DictReader(f):
             if row["granularite"] == "pays" and row["deces_ehpad"]:
                 france_ehpad = int(row["deces_ehpad"])

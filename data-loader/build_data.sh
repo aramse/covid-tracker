@@ -55,6 +55,13 @@ for f in $(ls data); do
   sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
   $PSQL -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
   cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter '}';"
+done
+
+echo "testing if new data can be read by api"
+curl --fail "api/covid?refresh=true&suffix=_tmp"
+
+echo "updating main data"
+for f in $(ls data); do
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
