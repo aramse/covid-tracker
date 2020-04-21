@@ -57,8 +57,10 @@ for f in $(ls data); do
   cat $f | $PSQL -c "copy ${table}_tmp from stdin csv delimiter '}';"
 done
 
-echo "testing if new data can be read by api"
-curl --fail "api/covid?refresh=true&suffix=_tmp"
+echo "checking if api exists, and ensuring it does not transition from working to broken"
+if [ curl --fail "api/covid?refresh=true" ]; then
+  curl --fail "api/covid?refresh=true&suffix=_tmp"
+fi
 
 echo "updating main data"
 for f in $(ls data); do
