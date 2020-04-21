@@ -47,10 +47,16 @@ curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1
 curl -fL "https://docs.google.com/spreadsheets/d/1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0/export?format=csv&id=1e703pe3GmBQt0i2yAOS0F6Bhxy91U1-NTB6JMRSTzc0&gid=1285380985" > population-data/population-USA.csv
 '''
 
+
+function get_table_name {
+  local f=$1
+  echo $f | cut -d '.' -f 1 | sed 's/-/_/g'
+}
+
 PSQL="psql postgresql://postgres:postgres@db:5432"
 echo "data retrieved, loading to database"
 for f in $(ls data); do
-  table=$(echo $f | cut -d '.' -f 1 | sed 's/-/_/g')
+  table=$(get_table_name $f)
   f=data/$f
   sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
   $PSQL -c "drop table if exists ${table}_tmp; create table ${table}_tmp (data varchar(10000));"
@@ -64,6 +70,7 @@ fi
 
 echo "updating main data"
 for f in $(ls data); do
+  table=$(get_table_name $f)
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
 done
