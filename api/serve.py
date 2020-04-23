@@ -52,8 +52,8 @@ class covid:
 
   def GET(self):
     params = web.input(refresh=False, suffix='')
-    global CACHE, LAST_CACHE_UPDATE
-    if params.refresh or not CACHE or (datetime.utcnow() - LAST_CACHE_UPDATE).minutes:
+    global CACHE, LAST_CACHE_UPDATE, CACHE_VALIDITY
+    if params.refresh or not CACHE or (datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60 >= CACHE_VALIDITY:
       if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + params.suffix, shell=True):
         print('error refreshing data')
         raise Exception
