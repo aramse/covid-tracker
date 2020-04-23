@@ -53,12 +53,17 @@ class covid:
   def GET(self):
     params = web.input(refresh=False, suffix='')
     global CACHE, LAST_CACHE_UPDATE, CACHE_VALIDITY
-    if params.refresh or not CACHE or (datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60 >= CACHE_VALIDITY:
+    cache_expired = (datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60 >= CACHE_VALIDITY
+    if params.refresh or not CACHE or cache_expired:
+      print 'last updated: ' + str(LAST_CACHE_UPDATE) + ', ' + str((datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60) + ' min ago'
       if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + params.suffix, shell=True):
         print('error refreshing data')
         raise Exception
       CACHE = format_data.get_data(suffix=params.suffix)
       LAST_CACHE_UPDATE = datetime.utcnow()
+    else:
+      print('using cache from ' + str(LAST_CACHE_UPDATE))
+
     return json.dumps(CACHE, sort_keys=True)
 
 
