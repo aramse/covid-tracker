@@ -55,7 +55,8 @@ class covid:
     global CACHE, LAST_CACHE_UPDATE, CACHE_VALIDITY
     cache_expired = (datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60 >= CACHE_VALIDITY if LAST_CACHE_UPDATE else False
     if params.refresh or not CACHE or cache_expired:
-      print 'last updated: ' + str(LAST_CACHE_UPDATE) + ', ' + str((datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60) + ' min ago'
+      if cache_expired:
+        print 'last updated: ' + str(LAST_CACHE_UPDATE) + ', ' + str((datetime.utcnow() - LAST_CACHE_UPDATE).seconds*60) + ' min ago'
       if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + params.suffix, shell=True):
         print('error refreshing data')
         raise Exception
