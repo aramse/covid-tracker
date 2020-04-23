@@ -9,10 +9,14 @@ import time
 import traceback
 import subprocess
 import format_data
+from datetime import datetime, timedelta
 
 CHECK_ALIVE_PATH = '/alive'
 CHECK_READY_PATH = '/ready'
+CACHE_VALIDITY = 60  # minutes
+
 CACHE = {}
+LAST_CACHE_UPDATE = None
 
 # Instrumentation for monitoring
 def before_request():
@@ -45,14 +49,16 @@ def exec_query(query, read=False):
 
 
 class covid:
+
   def GET(self):
     params = web.input(refresh=False, suffix='')
-    global CACHE
-    if params.refresh or not CACHE:
+    global CACHE, LAST_CACHE_UPDATE
+    if params.refresh or not CACHE or (datetime.utcnow() - LAST_CACHE_UPDATE).minutes:
       if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + params.suffix, shell=True):
         print('error refreshing data')
         raise Exception
       CACHE = format_data.get_data(suffix=params.suffix)
+      LAST_CACHE_UPDATE = datetime.utcnow()
     return json.dumps(CACHE, sort_keys=True)
 
 
