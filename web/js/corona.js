@@ -304,7 +304,7 @@ new Vue({
     download_data: function() {
       var cacheBypass = new Date().getTime();
       d3.json(
-        "../../api/80/covid?refresh=true",
+        "../../api/80/covid",
         this.prepareData
       );
     },
@@ -1189,7 +1189,7 @@ new Vue({
     exportData: function() {
       var a = document.createElement('a'),
         file = "covid-data.json";
-      a.href = "../../api/80/covid?refresh=true";
+      a.href = "../../api/80/covid";
       a.download = file;
       document.body.appendChild(a);
       a.click();
