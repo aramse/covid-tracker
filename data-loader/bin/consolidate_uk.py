@@ -32,7 +32,7 @@ def complete_last_row(dates, countries):
             countries[c]["confirmed"].append(0)
             countries[c]["deceased"].append(0)
     if len(countries["England"]["confirmed"]) < n:
-        print('fixing england for n ' + str(n))
+        # print('fixing england for n ' + str(n))
         for c in ["confirmed", "deceased"]:
             countries["England"][c].append(countries["UK"][c][-1] - countries["Wales"][c][-1] - countries["Scotland"][c][-1] - countries["Northern Ireland"][c][-1])
             # print(c + ' now at ' + str(countries["England"][c]))
@@ -55,8 +55,8 @@ with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
 print("date,country,confirmed,deceased")
 for i, d in enumerate(sorted(dates)):
     for b in countries.keys():
-        print('processing country: ' + b + ', (' + str(i) + ' ' + str(d) + ')')
+        # print('processing country: ' + b + ', (' + str(i) + ' ' + str(d) + ')')
         conf = str(countries[b]["confirmed"][i])
         dec = str(countries[b]["deceased"][i])
-        print(",".join([d, b, conf, dec]))
+        # print(",".join([d, b, conf, dec]))
 
