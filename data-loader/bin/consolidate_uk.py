@@ -3,6 +3,7 @@
 
 import os
 import csv
+import json
 
 initvals = lambda : {"confirmed": [], "deceased": []}
 countries = {
@@ -48,9 +49,12 @@ with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
     dates, countries = complete_last_row(dates, countries)
     del(countries["UK"])
 
-
+print(json.dumps(countries, indent=2))
 print("date,country,confirmed,deceased")
 for i, d in enumerate(sorted(dates)):
     for b in countries.keys():
-        print(",".join([d, b, str(countries[b]["confirmed"][i]), str(countries[b]["deceased"][i])]))
+        print('processing country: ' + b + ', (' + str(i) + ' ' + str(d) + ')')
+        conf = str(countries[b]["confirmed"][i])
+        dec = str(countries[b]["deceased"][i])
+        print(",".join([d, b, conf, dec]))
 
