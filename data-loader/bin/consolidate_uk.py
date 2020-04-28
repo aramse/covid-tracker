@@ -58,5 +58,5 @@ for i, d in enumerate(sorted(dates)):
         # print('processing country: ' + b + ', (' + str(i) + ' ' + str(d) + ')')
         conf = str(countries[b]["confirmed"][i])
         dec = str(countries[b]["deceased"][i])
-        # print(",".join([d, b, conf, dec]))
+        print(",".join([d, b, conf, dec]))
 
