@@ -24,9 +24,9 @@ components:
 
   - type: stateless
     name: api
-    instances: 3
+    instances: 2
     autoscale:
-      max_instances: 5
+      max_instances: 4
       target_cpu_util: 80
     containers:
       - dir: api
@@ -91,3 +91,16 @@ tests:
 #  - name: perf
 #    containers:
 #      - dir: ./tests/perf
+
+env-types:
+  - name: master
+    modifier:
+      components:
+        - name: '(?:db|api)'
+          containers:
+            - name: '.*'
+              resources:
+                cpu:
+                  min: 0.1
+                memory:
+                  min: 128 
