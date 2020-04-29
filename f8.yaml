@@ -21,6 +21,7 @@ components:
     name: initial-load
     containers:
       - dir: data-loader
+    always-run: true
 
   - type: stateless
     name: api
