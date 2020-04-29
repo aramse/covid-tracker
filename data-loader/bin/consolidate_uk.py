@@ -3,7 +3,6 @@
 
 import os
 import csv
-import json
 
 initvals = lambda : {"confirmed": [], "deceased": []}
 countries = {
@@ -23,19 +22,20 @@ def complete_last_row(dates, countries):
     n = len(countries["UK"]["confirmed"])
     if not n:
         return dates, countries
+    dates = dates[0:n]
     for c in ["Wales", "Northern Ireland", "England", "Scotland"]:
         countries[c]["confirmed"] = countries[c]["confirmed"][0:n]
         countries[c]["deceased"] = countries[c]["deceased"][0:n]
-        dates = dates[0:n]
     for c in ["Wales", "Northern Ireland"]:
-        if len(countries[c]["confirmed"]) < n:
+        if not len(countries[c]["confirmed"]):
             countries[c]["confirmed"].append(0)
             countries[c]["deceased"].append(0)
-    if len(countries["England"]["confirmed"]) < n:
-        # print('fixing england for n ' + str(n))
-        for c in ["confirmed", "deceased"]:
+        elif len(countries[c]["confirmed"]) < n:
+            countries[c]["confirmed"].append(countries[c]["confirmed"][n-2])
+            countries[c]["deceased"].append(countries[c]["deceased"][n-2])
+    for c in ["confirmed", "deceased"]:
+        if len(countries["England"][c]) < n:
             countries["England"][c].append(countries["UK"][c][-1] - countries["Wales"][c][-1] - countries["Scotland"][c][-1] - countries["Northern Ireland"][c][-1])
-            # print(c + ' now at ' + str(countries["England"][c]))
     return dates, countries
 
 with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
@@ -51,12 +51,8 @@ with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
     dates, countries = complete_last_row(dates, countries)
     del(countries["UK"])
 
-# print(json.dumps(countries, indent=2))
+
 print("date,country,confirmed,deceased")
 for i, d in enumerate(sorted(dates)):
     for b in countries.keys():
-        # print('processing country: ' + b + ', (' + str(i) + ' ' + str(d) + ')')
-        conf = str(countries[b]["confirmed"][i])
-        dec = str(countries[b]["deceased"][i])
-        print(",".join([d, b, conf, dec]))
-
+        print(",".join([d, b, str(countries[b]["confirmed"][i]), str(countries[b]["deceased"][i])]))
