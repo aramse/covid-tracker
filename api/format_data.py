@@ -412,7 +412,7 @@ def get_data(suffix=''):
     for scope, metas in localities.items():
         if "filename" not in metas or not metas["filename"]:
             continue
-        fname = os.path.join("data", metas["filename"])
+        fname = os.path.join("data" + suffix, metas["filename"])
 
         data["scopes"][scope] = {
             "level": metas["level"],
