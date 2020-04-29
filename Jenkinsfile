@@ -30,10 +30,10 @@ pipeline {
   }
   post {
     success {
-      slackSend color: "#4ee44e", message: "${JOB_NAME} Build SUCCEEDED: ${BUILD_URL}"
+      slackSend color: "#4ee44e", message: "${JOB_NAME} <${BUILD_URL}/display/redirect|Build #${BUILD_NUMBER}> Succeeded"
     }
     failure {
-      slackSend color: "#FF0000", message: "${JOB_NAME} Build FAILED: ${BUILD_URL}"
+      slackSend color: "#FF0000", message: "${JOB_NAME} <${BUILD_URL}/display/redirect|Build #${BUILD_NUMBER}> Failed"
     }
   }
 }
