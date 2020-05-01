@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import os
 import csv
+import sys
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 initvals = lambda : {"confirmed": [], "deceased": []}
 countries = {
@@ -55,4 +60,7 @@ with open(os.path.join("data", "covid_19_indicators_uk.csv")) as f:
 print("date,country,confirmed,deceased")
 for i, d in enumerate(sorted(dates)):
     for b in countries.keys():
-        print(",".join([d, b, str(countries[b]["confirmed"][i]), str(countries[b]["deceased"][i])]))
+        # eprint(b, str(i), str(d))
+        conf = str(countries[b]["confirmed"][i])
+        dec = str(countries[b]["deceased"][i])
+        print(",".join([d, b, conf, dec]))
