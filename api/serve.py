@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 
 CHECK_ALIVE_PATH = '/alive'
 CHECK_READY_PATH = '/ready'
-CACHE_VALIDITY = 360  # minutes
+CACHE_VALIDITY = 720  # minutes
 
 CACHE = {}
 LAST_CACHE_UPDATE = None
