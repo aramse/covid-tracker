@@ -81,7 +81,7 @@ done
 echo "data load completed"
 
 echo "updating cache"
-ab -n 12 -c 3 'http://api/covid?refresh=true'
+ab -n 12 -c 4 'http://api/covid?refresh=true'
 echo "cache updated"
 
 exit 0
