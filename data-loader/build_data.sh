@@ -19,13 +19,16 @@ curl -fL https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/
 
 # Spain official data
 curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | sed -n '/NOTA:.*/q;p' > data/serie_historica_acumulados.csv
+# --> check that it looks fine
+echo "testing Spain data"
+head -2 data/serie_historica_acumulados.csv | tail -1 | grep 2020
 
 # France official data
 curl -fL https://raw.githubusercontent.com/opencovid19-fr/data/master/dist/chiffres-cles.csv > data/chiffres-cles.csv
 
 # UK official data
 curl -fL https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-indicators-uk.csv > data/covid_19_indicators_uk.csv
-python bin/consolidate_uk.py > data/uk.csv || true
+python bin/consolidate_uk.py > data/uk.csv
 
 # Germany official data
 curl -fL https://raw.githubusercontent.com/micgro42/COVID-19-DE/master/time_series/time-series_19-covid-Confirmed.csv > data/time_series_covid19_confirmed_Germany.csv
