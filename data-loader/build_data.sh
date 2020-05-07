@@ -18,7 +18,7 @@ done;
 curl -fL https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-regioni/dpc-covid19-ita-regioni.csv > data/dpc-covid19-ita-regioni.csv
 
 # Spain official data
-curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | sed -n '/NOTA:.*/q;p' > data/serie_historica_acumulados.csv
+curl -fL https://covid19.isciii.es/resources/serie_historica_acumulados.csv | LC_ALL=C sed -n '/NOTA.*/q;p' > data/serie_historica_acumulados.csv
 # --> check that it looks fine
 echo "testing Spain data"
 head -2 data/serie_historica_acumulados.csv | tail -1 | grep 2020
