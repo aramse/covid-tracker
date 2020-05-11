@@ -59,7 +59,7 @@ components:
 
   - name: data-loader
     type: scheduled
-    schedule: '0 2,4,6,16 * * *'
+    schedule: '0 2,4,6,12,16 * * *'
     containers:
       - dir: data-loader
 
