@@ -69,8 +69,6 @@ done
 echo "checking if api exists, and ensuring it does not transition from working to broken"
 if curl -v --fail "api/covid?refresh=true" > /dev/null; then
   curl -v --fail "api/covid?refresh=true&suffix=_tmp" > /dev/null
-else
-  echo "api not working/missing, skipping"
 fi
 
 echo "updating main data"
@@ -82,8 +80,10 @@ done
 
 echo "data load completed"
 
-echo "updating cache"
-ab -n 12 -c 4 'http://api/covid?refresh=true'
-echo "cache updated"
+if curl -v --fail "api/covid?refresh=true" > /dev/null; then
+  echo "updating cache"
+  ab -n 12 -c 4 'http://api/covid?refresh=true'
+  echo "cache updated"
+fi
 
 exit 0
