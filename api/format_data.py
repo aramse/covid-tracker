@@ -373,7 +373,7 @@ def get_data(suffix=''):
             "filter": lambda row: row["FECHA"] and "/202" in row["FECHA"],
             "fields": {
                 "confirmed": "CASOS",
-                "recovered": "Recuperados",
+                #"recovered": "Recuperados",
                 "hospitalized": "Hospitalizados",
                 "intensive_care": "UCI",
                 "deceased": "Fallecidos"
