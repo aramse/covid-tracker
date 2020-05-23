@@ -80,8 +80,10 @@ done
 
 echo "data load completed"
 
-echo "updating cache"
-ab -n 12 -c 4 'http://api/covid?refresh=true'
-echo "cache updated"
+if curl -v --fail "api/covid?refresh=true" > /dev/null; then
+  echo "updating cache"
+  ab -n 12 -c 4 'http://api/covid?refresh=true'
+  echo "cache updated"
+fi
 
 exit 0
