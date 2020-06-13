@@ -57,6 +57,7 @@ class covid:
     if params.refresh or not CACHE or cache_expired:
       if cache_expired:
         print 'cache expired (' + str(CACHE_VALIDITY) + ' min), last updated at ' + str(LAST_CACHE_UPDATE)
+      # TO-DO: install/use postgres client and directly query/return this data
       if 0 != subprocess.call(os.getcwd() + '/export_data.sh ' + params.suffix, shell=True):
         print('error refreshing data')
         raise Exception
