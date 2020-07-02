@@ -105,5 +105,3 @@ env-types:
                   min: 0.1
                 memory:
                   min: 128 
-        - name: initial-load
-          always-run: false
