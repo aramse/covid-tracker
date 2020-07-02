@@ -448,6 +448,8 @@ def get_data(suffix=''):
                         pop = 0
                     data["scopes"][scope]["values"][name] = unit_vals(n_dates, fields, pop)
                 for field in fields:
+                    if row[metas["fields"][field]] == "NaN":
+                        row[metas["fields"][field]] = 0
                     val = int(row[metas["fields"][field]] or 0)
                     data["scopes"][scope]["values"][name][field][idx] = val
                     data["scopes"][scope]["values"]["total"][field][idx] += val
