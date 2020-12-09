@@ -16,19 +16,13 @@ components:
       - servicePort: 5432
         containerPort: 5432
     volumeMountPath: /var/lib/postgresql
-
   - type: init
     name: initial-load
     containers:
       - dir: data-loader
     always-run: true
-
   - type: stateless
     name: api
-    instances: 2
-    autoscale:
-      max_instances: 4
-      target_cpu_util: 80
     containers:
       - dir: api
         readyCheck:
@@ -41,11 +35,13 @@ components:
         external: true
       - servicePort: 8000
         containerPort: 8000
-        metricsPath: /  # this component serves metrics on port 8000, this tells f8 to request this path to collect them
-
+        metricsPath: /
+    instances: 2
+    autoscale:
+      max_instances: 4
+      target_cpu_util: 80
   - type: stateless
     name: web
-    instances: 2
     containers:
       - dir: web
         readyCheck:
@@ -56,15 +52,14 @@ components:
       - servicePort: 80
         containerPort: 80
         external: true
-
-  - name: data-loader
-    type: scheduled
+    instances: 5
+  - type: scheduled
     schedule: '0 2,4,6,12,16 * * *'
+    name: data-loader
     containers:
       - dir: data-loader
-
-  - name: db-ui
-    type: stateless
+  - type: stateless
+    name: db-ui
     containers:
       - image: 'sosedoff/pgweb:0.9.12'
         readyCheck:
@@ -78,21 +73,16 @@ components:
     expose:
       - servicePort: 80
         containerPort: 8081
-        keep-prefix: true
         external: true
-
+        keep-prefix: true
 tests:
   - name: func
     containers:
       - image: centos
         command:
           - /bin/sh
-          - -c
-          - curl --fail 'api/covid?refresh=true'
-#  - name: perf
-#    containers:
-#      - dir: ./tests/perf
-
+          - '-c'
+          - 'curl --fail ''api/covid?refresh=true'''
 env-types:
   - name: master
     modifier:
@@ -104,4 +94,4 @@ env-types:
                 cpu:
                   min: 0.1
                 memory:
-                  min: 128 
+                  min: 128
