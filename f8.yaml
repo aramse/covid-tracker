@@ -37,9 +37,9 @@ components:
         containerPort: 8000
         metricsPath: /
     instances: 2
-    autoscale:
-      max_instances: 4
-      target_cpu_util: 80
+    #autoscale:
+    #  max_instances: 4
+    #  target_cpu_util: 80
   - type: stateless
     name: web
     containers:
