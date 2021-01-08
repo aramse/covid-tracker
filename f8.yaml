@@ -52,12 +52,15 @@ components:
       - servicePort: 80
         containerPort: 80
         external: true
-    instances: 5
+    instances: 2
   - type: scheduled
     schedule: '0 2,4,6,12,16 * * *'
     name: data-loader
     containers:
       - dir: data-loader
+        resources:
+          memory:
+            min: 512
   - type: stateless
     name: db-ui
     containers:
