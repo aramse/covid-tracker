@@ -1,0 +1,72 @@
+general:
+  name: covid-tracker
+components:
+  - type: template
+    template: postgres
+    name: db
+    vars: {}
+  - type: init
+    name: initial-load
+    containers:
+      - dir: data-loader
+    always-run: true
+  - type: stateless
+    name: api
+    containers:
+      - dir: ./api
+        readyCheck:
+          httpGet:
+            port: 8080
+            path: /ready
+    expose:
+      - servicePort: 80
+        containerPort: 8080
+        external: true
+      - servicePort: 8000
+        containerPort: 8000
+        metricsPath: /
+    instances: 2
+    autoscale:
+      max_instances: 3
+      target_cpu_util: 80
+  - type: stateless
+    name: web
+    containers:
+      - dir: ./web
+        readyCheck:
+          httpGet:
+            port: 80
+            path: /
+    expose:
+      - servicePort: 80
+        containerPort: 80
+        external: true
+    instances: 2
+  - type: scheduled
+    schedule: '0 2,4,6,12,16 * * *'
+    name: data-loader
+    containers:
+      - dir: data-loader
+        resources:
+          memory:
+            min: 512
+tests:
+  - name: func
+    containers:
+      - image: centos
+        command:
+          - /bin/sh
+          - '-c'
+          - 'curl --fail ''api/covid?refresh=true'''
+env-types:
+  - name: master
+    modifier:
+      components:
+        - name: '(?:db|api)'
+          containers:
+            - name: '.*'
+              resources:
+                cpu:
+                  min: 0.3
+                memory:
+                  min: 512
