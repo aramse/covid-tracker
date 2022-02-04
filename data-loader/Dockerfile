@@ -1,6 +1,6 @@
 FROM ubuntu
 
-RUN apt-get install -y postgresql apache2-utils
+RUN apt-get update -y && apt-get install -y postgresql apache2-utils
 
 WORKDIR /app
 
