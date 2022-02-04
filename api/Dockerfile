@@ -1,6 +1,6 @@
 FROM ubuntu
 
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get update -y && apt-get install -y postgresql python2 wget
+RUN apt-get update -y && apt-get install -y tzdata postgresql python2 wget
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
 RUN pip install --upgrade pip
 RUN pip install web.py
