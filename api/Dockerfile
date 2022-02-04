@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:20.0.4
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y postgresql python2 wget
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
