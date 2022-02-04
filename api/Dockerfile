@@ -1,6 +1,6 @@
 FROM ubuntu
 
-ENV DEBIAN_FRONTEND=noninteractive 
+ENV TERM=linux
 RUN apt-get update -y && apt-get install -y postgresql python2 wget
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
 RUN pip install --upgrade pip
