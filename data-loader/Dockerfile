@@ -1,7 +1,6 @@
-FROM centos:7
+FROM ubuntu
 
-RUN yum install -y postgresql
-RUN yum install -y httpd-tools
+RUN apt-get install -y postgresql apache2-utils
 
 WORKDIR /app
 
