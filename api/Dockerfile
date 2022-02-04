@@ -1,8 +1,7 @@
-FROM centos:7
+FROM ubuntu
 
-RUN yum install -y postgresql
-RUN yum install -y epel-release
-RUN yum install -y python-pip
+RUN apt-get update -y && install -y postgresql python2 wget
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
 RUN pip install --upgrade pip
 RUN pip install web.py
 RUN pip install prometheus_client
