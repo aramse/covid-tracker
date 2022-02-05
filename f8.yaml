@@ -43,7 +43,7 @@ components:
         external: true
     instances: 2
   - type: scheduled
-    schedule: '0 2,4,6,12,16 * * *'
+    schedule: '0 4,20 * * *'
     name: data-loader
     containers:
       - dir: data-loader

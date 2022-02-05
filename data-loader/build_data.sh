@@ -82,7 +82,7 @@ echo "data load completed"
 
 if curl -v --fail "api/covid?refresh=true" > /dev/null; then
   echo "updating cache"
-  ab -n 6 -c 2 -s 120 'http://api/covid?refresh=true'
+  ab -n 4 -c 2 -s 180 'http://api/covid?refresh=true'
   echo "cache updated"
 fi
 
