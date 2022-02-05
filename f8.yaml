@@ -65,8 +65,7 @@ env-types:
         - name: db
           vars:
             CPU_MIN: 0.3
-            CPU_MAX: 0.5
-            MEMORY: 512
+            MEMORY: 1024
         - name: api
           containers:
             - name: '.*'
@@ -74,4 +73,4 @@ env-types:
                 cpu:
                   min: 0.3
                 memory:
-                  min: 512
+                  min: 1024
