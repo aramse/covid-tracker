@@ -62,7 +62,11 @@ env-types:
   - name: master
     modifier:
       components:
-        - name: '(?:db|api)'
+        - name: db
+          vars:
+            CPU_MIN: 0.3
+            MEMORY: 512
+        - name: api
           containers:
             - name: '.*'
               resources:
