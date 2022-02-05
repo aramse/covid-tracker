@@ -11,4 +11,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD python -u serve.py
+CMD python2 -u serve.py
