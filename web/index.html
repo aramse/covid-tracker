@@ -261,7 +261,7 @@
     <main>
       <center id="loader" v-if="init">
         <img src="img/loader.gif" alt="loader" /><br/>
-        <span>{{ initMessage }}</span>
+        <span>{{ initMessage }}<br/>This may take a minute...</span>
       </center>
       <div class="svg" style="height: 6000px">
         <div v-if="vizChoice === 'multiples'" class="legend multiples">
