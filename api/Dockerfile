@@ -1,5 +1,6 @@
 FROM ubuntu
 
+RUN fjakldsjflaksj
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 RUN apt-get update -y && apt-get install -y postgresql python2 wget
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
