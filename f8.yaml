@@ -29,6 +29,7 @@ components:
     autoscale:
       max_instances: 3
       target_cpu_util: 80
+    block: false
   - type: stateless
     name: web
     containers:
@@ -67,10 +68,3 @@ env-types:
             CPU_MIN: 0.3
             MEMORY: 1024
         - name: api
-          containers:
-            - name: '.*'
-              resources:
-                cpu:
-                  min: 0.3
-                memory:
-                  min: 1024
