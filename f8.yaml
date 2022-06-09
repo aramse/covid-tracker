@@ -68,3 +68,8 @@ env-types:
             CPU_MIN: 0.3
             MEMORY: 1024
         - name: api
+          containers:
+            - name: '.*'
+              resources:
+                memory:
+                  min: 1024
