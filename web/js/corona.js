@@ -1004,8 +1004,8 @@ new Vue({
         });
       }
 
-      // Draw Time axis
-      var ticksFormat = align_nthcase ? d3.formatDaysSince(start) : d3.timeFormat("%b %d"),
+          // Draw Time axis
+      var ticksFormat = align_nthcase ? d3.formatDaysSince(start) : d3.timeFormat("%b %d, %y"),
         ticks = d3.axisBottom(xScale)
         .ticks(4 * Math.floor(Math.min(zoomedDates.length / 4, width / 200)))
         .tickFormat(ticksFormat)
