@@ -4,6 +4,10 @@ set -e
 
 mkdir -p data
 
+# Vaccination data
+curl -sfL "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv" > data/vaccinations.csv
+./bin/consolidate_vaccines.py > data/vaccines.csv
+
 # World JHU data
 for typ in confirmed deaths recovered; do
   curl -fL https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_${typ}_global.csv > data/time_series_covid19_${typ}_global.csv
@@ -60,7 +64,7 @@ function get_table_name {
 
 PSQL="psql postgresql://postgres:postgres@db:5432"
 echo "data retrieved, loading to database"
-for f in $(ls data); do
+for f in $(ls data/*.csv); do
   table=$(get_table_name $f)
   f=data/$f
   sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
@@ -74,7 +78,7 @@ if curl -v --fail "api/covid?refresh=true" > /dev/null; then
 fi
 
 echo "updating main data"
-for f in $(ls data); do
+for f in $(ls data/*.csv); do
   table=$(get_table_name $f)
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
