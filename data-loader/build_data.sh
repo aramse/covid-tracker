@@ -34,12 +34,12 @@ curl -fL https://raw.githubusercontent.com/opencovid19-fr/data/master/dist/chiff
 
 # UK official data
 curl -fL https://raw.githubusercontent.com/tomwhite/covid-19-uk-data/master/data/covid-19-indicators-uk.csv > data/covid_19_indicators_uk.csv
-python2 bin/consolidate_uk.py > data/uk.csv
+python3 bin/consolidate_uk.py > data/uk.csv
 
 # Germany official data
 curl -fL https://raw.githubusercontent.com/micgro42/COVID-19-DE/master/time_series/time-series_19-covid-Confirmed.csv > data/time_series_covid19_confirmed_Germany.csv
 curl -fL https://raw.githubusercontent.com/micgro42/COVID-19-DE/master/time_series/time-series_19-covid-Deaths.csv > data/time_series_covid19_deaths_Germany.csv
-python2 bin/consolidate_germany.py > data/germany.csv
+python3 bin/consolidate_germany.py > data/germany.csv
 
 
 a='''
