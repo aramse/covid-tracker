@@ -1,7 +1,7 @@
 FROM ubuntu
 
 RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-RUN apt-get install -y postgresql apache2-utils python2 curl
+RUN apt-get install -y postgresql apache2-utils python3 curl
 
 WORKDIR /app
 
