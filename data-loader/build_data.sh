@@ -64,7 +64,7 @@ function get_table_name {
 
 PSQL="psql postgresql://postgres:postgres@db:5432"
 echo "data retrieved, loading to database"
-for f in $(ls data/*.csv); do
+for f in $(ls data | grep ".csv"); do
   table=$(get_table_name $f)
   f=data/$f
   sed 's/"/"""/g' $f > $f.tmp && mv $f.tmp $f
@@ -78,7 +78,7 @@ if curl -v --fail "api/covid?refresh=true" > /dev/null; then
 fi
 
 echo "updating main data"
-for f in $(ls data/*.csv); do
+for f in $(ls data | grep ".csv"); do
   table=$(get_table_name $f)
   $PSQL -c "drop table if exists ${table}"
   $PSQL -c "alter table ${table}_tmp rename to ${table};"
