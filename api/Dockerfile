@@ -1,9 +1,7 @@
 FROM ubuntu
 
 RUN apt-get -y update && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-RUN apt-get install -y postgresql python2 wget
-RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py && python2 get-pip.py
-RUN pip install --upgrade pip
+RUN apt-get install -y postgresql python3 python3-pip wget
 RUN pip install web.py
 RUN pip install prometheus_client
 
@@ -11,4 +9,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD python2 -u serve.py
+CMD python3 -u serve.py
