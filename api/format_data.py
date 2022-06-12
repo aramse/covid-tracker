@@ -425,7 +425,7 @@ def get_data(suffix=''):
             "values": {}
         }
 
-        with (open(fname) if sys.version < "3" else open(fname, encoding=metas.get("encoding", "utf-8"))) as f:
+        with (open(fname) if sys.version < "3" else open(fname, encoding=metas.get("encoding", "utf-8-sig"))) as f:
             rows = [row for row in csv.DictReader(f) if "filter" not in metas or metas["filter"](row)]
 
             for row in rows:
