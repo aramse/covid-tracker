@@ -313,7 +313,7 @@ def get_data(suffix=''):
             "filename": "dpc_covid19_ita_regioni.csv",
             "level": "region",
             "level_field": "denominazione_regione",
-            "date_accessor": lambda row: row["date"].split("T")[0],
+            "date_accessor": lambda row: row["data"].split("T")[0],
             "fields": {
                 "tested": "tamponi",
                 "confirmed": "totale_casi",
