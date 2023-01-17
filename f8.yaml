@@ -69,6 +69,7 @@ env-types:
             MEMORY: 1024
         - name: api
           containers:
-            - resources:
+            - name: .*
+              resources:
                 memory:
                   min: 1024
