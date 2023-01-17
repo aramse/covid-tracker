@@ -73,3 +73,4 @@ env-types:
               resources:
                 memory:
                   min: 1024
+
