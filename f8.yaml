@@ -60,7 +60,7 @@ tests:
           - '-c'
           - 'curl --fail ''api/covid?refresh=true'''
 env-types:
-  - name: master
+  - name: prod
     modifier:
       components:
         - name: db
@@ -69,7 +69,6 @@ env-types:
             MEMORY: 1024
         - name: api
           containers:
-            - name: '.*'
-              resources:
+            - resources:
                 memory:
                   min: 1024
